@@ -94,6 +94,10 @@ public class Player {
     }
 
     public Rectangle getBoundingBox() {
-        return new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
+        return new Rectangle(position.x, position.y, 10, 10);
+    }
+
+    public Vector2 getPosition() {
+        return position;
     }
 }

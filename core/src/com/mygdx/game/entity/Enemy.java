@@ -91,4 +91,8 @@ public class Enemy {
             shoot(bulletAngle, bulletSpeed);
         }
     }
+
+    public Vector2 getPosition() {
+        return position;
+    }
 }

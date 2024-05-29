@@ -26,6 +26,8 @@ public class GameScreen implements Screen {
     private Array<Enemy> enemies;
     private BitmapFont font;
     private BitmapFont font2;
+    boolean victory;
+    boolean gameOver;
 
     private float timer;
     private float enemyShootTimer;
@@ -42,7 +44,7 @@ public class GameScreen implements Screen {
 
         font2 = new BitmapFont();
         font2.setColor(Color.RED);
-        font.getData().setScale(2f);
+        font2.getData().setScale(2f);
 
 
 
@@ -58,6 +60,8 @@ public class GameScreen implements Screen {
         enemies = new Array<>();
         enemies.add(enemy);
         timer = 0.0f;
+        victory = false;
+        gameOver = false;
     }
 
     @Override
@@ -71,6 +75,18 @@ public class GameScreen implements Screen {
         if (enemyShootTimer > 0.5f && enemy.getHealth() > 0f) {
             chooseRandomAttack(MyGdxGame.generateRandomNum(1, 2));
             enemyShootTimer = 0;
+        }
+
+        if (player.getHealth() <= 0) {
+            if (!gameOver) {
+                gameOver = true;
+                mainGame.setScreen(new GameOverScreen(mainGame));
+            }
+        } else if (enemy.getHealth() <= 0) {
+            if (!victory) {
+                victory = true;
+                mainGame.setScreen(new VictoryScreen(mainGame));
+            }
         }
 
         player.update(delta);
@@ -98,8 +114,8 @@ public class GameScreen implements Screen {
             }
         }
 
-        font.draw(batch, "Your HP: " + player.getHealth(), Gdx.graphics.getWidth()/2f, 100);
-        font2.draw(batch, "Enemy HP: " + enemy.getHealth(), Gdx.graphics.getWidth()/2f, 600);
+        font.draw(batch, String.valueOf(player.getHealth()), player.getPosition().x + 20, player.getPosition().y - 15);
+        font2.draw(batch, String.valueOf(enemy.getHealth()), Gdx.graphics.getWidth()/2f -100, enemy.getPosition().y + 30);
 
         batch.end();
     }
@@ -127,6 +143,8 @@ public class GameScreen implements Screen {
                 bullet.setActive(false);
                 player.setHealth(player.getHealth() - 10);
                 System.out.println("Player hit!");
+            } else if (bullet.isOutOfBounds()) {
+                bullet.setActive(false);
             }
         }
     }
@@ -164,15 +182,16 @@ public class GameScreen implements Screen {
         switch (choice) {
             case 1: {
                 int numBullets = MyGdxGame.generateRandomNum(10, 55);
-                float speed = (float) MyGdxGame.generateRandomNum(50, 300);
+                float speed = (float) MyGdxGame.generateRandomNum(50, 200);
                 float angle = (float) MyGdxGame.generateRandomNum(-10, 10);
                 enemy.shootCircularPattern(numBullets, speed, angle);
             }
             case 2: {
                 int numBullets = MyGdxGame.generateRandomNum(10, 55);
                 float speed = (float) MyGdxGame.generateRandomNum(10, 20);
+                int bool = MyGdxGame.generateRandomNum(0, 1);
                 float angle = (float) MyGdxGame.generateRandomNum(-10, 10);
-                enemy.shootSpiralPattern(numBullets, speed, true, angle);
+                enemy.shootSpiralPattern(numBullets, speed, bool == 1 ? true : false, angle);
             }
         }
     }

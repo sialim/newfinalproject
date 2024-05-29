@@ -38,8 +38,6 @@ public class MyGdxGame extends Game {
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
 	}
 
 	public static int generateRandomNum(int min, int max){

@@ -1,5 +1,6 @@
 package com.mygdx.game.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -56,5 +57,9 @@ public class EntBullet {
 
     public void setActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public boolean isOutOfBounds() {
+        return position.x > Gdx.graphics.getWidth() || position.x < 0 || position.y > Gdx.graphics.getHeight() || position.y < 0;
     }
 }
